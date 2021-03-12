@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
       name='dm_tools',
       version='0.1',
-      description='Bunch of generic tools for Data Managers to use and play with',
+      description='Tools for Data managers to Assess datasets, codelists etc.',
       long_description=long_description,
       long_description_content_type="text/markdown",
       url='https://github.com/GSS-Cogs/dm_tools',
