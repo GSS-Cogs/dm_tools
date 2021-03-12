@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: dm-tools
+Version: 0.1
+Summary: Tools for Data managers to Assess datasets, codelists etc.
+Home-page: https://github.com/GSS-Cogs/dm_tools
+Author: Leigh Perryman
+Author-email: leigh.perryman@gsscogs.uk
+License: MIT
+Description: # dm_tools
+        Bunch of generic tools for Data Managers to use and play with
+        
+Platform: UNKNOWN
+Description-Content-Type: text/markdown

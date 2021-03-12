@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+setup.py
+dm_tools.egg-info/PKG-INFO
+dm_tools.egg-info/SOURCES.txt
+dm_tools.egg-info/dependency_links.txt
+dm_tools.egg-info/not-zip-safe
+dm_tools.egg-info/top_level.txt
