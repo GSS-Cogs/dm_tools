@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-      name='dm_tools',
+      name='dmtools',
       version='0.1',
       description='Tools for Data managers to Assess datasets, codelists etc.',
       long_description=long_description,
