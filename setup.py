@@ -12,6 +12,5 @@ setuptools.setup(
       url='https://github.com/GSS-Cogs/dm_tools',
       author='Leigh Perryman',
       author_email='leigh.perryman@gsscogs.uk',
-      license='MIT',
       packages=setuptools.find_packages(),
       zip_safe=False)
