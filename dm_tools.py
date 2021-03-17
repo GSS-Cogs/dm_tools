@@ -3,6 +3,17 @@ import os
 import pandas as pd
 
 def find_concepts(codes, pth, colnme, dimension):
+    """
+    This method searches through a directory of codelist csv files looking for instances of each value within the codes list.
+    It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it cound it in and the number of times it was found.
+    It also outputs a csv file giving the percentage of split between the files, which codes were found in. 
+    Method assumes directory only has files with extensions .csv and .csv-metadata.json.
+    This methods takes as its arguments:
+        codes: A list of unique values taken from a datasets column within a transform
+        pth: This is the path to the codelists you want to search through
+        colnme: This is the column within each codelist to want to search through
+        dimension: This is the name of the dimension for naming output files
+    """
     try:
         exnot = 'csv-metadata' # This is the type of file you don't want
         
