@@ -63,7 +63,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension):
 
         try:
             df1 = pd.read_csv(pth)
-            df1 = pd.DataFrame(df[colnme])
+            df1 = pd.DataFrame(df1[colnme])
             df1 = df1.rename(columns={colnme:'Codelist Codes'})
             df2 = pd.DataFrame(codes)
             df2 = df2.rename(columns={0:'Dataset Codes'})
