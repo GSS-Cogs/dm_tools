@@ -55,32 +55,35 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
 
 
 def check_all_codes_in_codelist(codes, pth, colnme, dimension):
-    """
-
-    """
     try:
+        dimension = pathify(dimension)
         print('Search File: ' + pth + '\n')   
 
         try:
             df1 = pd.read_csv(pth)
-            df1 = pd.DataFrame(df1[colnme])
-            df1 = df1.rename(columns={colnme:'Codelist Codes'})
-            df2 = pd.DataFrame(codes)
-            df2 = df2.rename(columns={0:'Dataset Codes'})
-            if df1['Codelist Codes'].count() >= df2['Dataset Codes'].count():
-                df3 = pd.concat([df1, df2], axis=1)
-                df3['Dataset Codes'] = df3['Dataset Codes'].fillna('NOT FOUND')
-            else:
-                df3 = pd.concat([df2, df1], axis=1, join="inner")
-                df3['Codelist Codes'] = df3['Codelist Codes'].fillna('NOT FOUND')
-    
-            df3 = df3[['Codelist Codes', 'Dataset Codes']]
+            list1 = list(df1[colnme])
+            list2 = codes
+            
+            output = []
+            for i in list2:
+                try:
+                    if pd.isna(i):
+                        output.append([i,'----NANANANANA----','ITS A NAN'])
+                    elif i in list1:
+                        output.append([i,list1[list1.index(i)],'Found'])
+                    else:
+                        output.append([i,'----','NOT FOUND'])
+                except Exception as e:
+                    output.append([i,'ERROR',e])
+            output = pd.DataFrame(output)
+            output = output.rename(columns={0:'Dataset Codes', 1:'Codelist Codes', 2:'Result'})
 
-            out = dimension + "-check_all_codes-search"
+            out = dimension + "-check-all-codes-search"
             if not os.path.exists(out):
                 os.mkdir(out)
         
-            df3.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
+            output.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
+            del df1, df2, df3
         except Exception as x:
             print(x)
 
