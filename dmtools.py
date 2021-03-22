@@ -4,9 +4,12 @@ import pandas as pd
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
     """
-    This method searches through a directory of codelist csv files looking for instances of each value within the codes list.
+    This method searches through a directory of codelist csv files looking for instances of each value within the list, codes.
     It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it found it in and the number of times it was found.
-    It also outputs a csv file giving the percentage of split between the files, which codes were found in. 
+    It also outputs a csv file giving the percentage split between the files where codes were found.
+    Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves files called:
+         1. {dimension}-code-search.csv (Columns = Code, Filename, Count)
+         2. {dimension}-percentage-split.csv (Columns = Filename, Counts, Percentage)
     Method assumes directory only has files with extensions .csv and .csv-metadata.json.
     This methods takes as its arguments:
         codes: A list of unique values taken from a datasets column within a transform
@@ -36,7 +39,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
             except Exception as x:
                 print(x)
 
-        out = dimension + "-code-search"
+        out = dimension + "-codelist-analysis"
         if not os.path.exists(out):
             os.mkdir(out)
 
@@ -55,6 +58,17 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
 
 
 def check_all_codes_in_codelist(codes, pth, colnme, dimension):
+    """
+    This methods takes a unique list of values (codes) and checks to see if they are in a specific csv codelist file (pth), column from file is sleected with colnme.
+    the dimension variable is used to name the resulting file, which lists if the code has been found or not, it also looks for any Nan values.
+    Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves a file called {dimension}-code-search.csv,
+    that lists the results of the search (Columns = Dataset Codes, Codelist Codes, Result: {Found, NOT FOUND, ITS A NAN})
+    This methods takes as its arguments:
+        codes: A list of unique values taken from a datasets column within a transform
+        pth: This is the path to the csv odelist file you want to search through
+        colnme: This is the column within each codelist to want to search through
+        dimension: This is the name of the dimension for naming output files
+    """
     try:
         dimension = pathify(dimension)
         print('Search File: ' + pth + '\n')   
@@ -78,12 +92,11 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension):
             output = pd.DataFrame(output)
             output = output.rename(columns={0:'Dataset Codes', 1:'Codelist Codes', 2:'Result'})
 
-            out = dimension + "-check-all-codes-search"
+            out = dimension + "-codelist-analysis"
             if not os.path.exists(out):
                 os.mkdir(out)
         
             output.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
-            del df1, df2, df3
         except Exception as x:
             print(x)
 
