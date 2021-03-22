@@ -4,7 +4,7 @@ import pandas as pd
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
     """
-    This method searches through a directory of codelist csv files looking for instances of each value within the list, codes.
+    This method searches through a directory of codelist csv files looking for instances of each value within the passed unique list (codes).
     It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it found it in and the number of times it was found.
     It also outputs a csv file giving the percentage split between the files where codes were found.
     Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves files called:
@@ -18,6 +18,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         dimension: This is the name of the dimension for naming output files
     """
     try:
+        dimension = pathify(dimension)
         exnot = 'csv-metadata' # This is the type of file you don't want
         
         print('Search Directory: ' + pth + '\n')
