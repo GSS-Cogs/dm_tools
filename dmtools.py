@@ -4,6 +4,7 @@ import pandas as pd
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
     """
+    CHECK IF ANY OF YOUR DIMENSION VALUES (CODES) ARE ALREADY DEFINED IN A CODELIST(S)
     This method searches through a directory of codelist csv files looking for instances of each value within the passed unique list (codes).
     It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it found it in and the number of times it was found.
     It also outputs a csv file giving the percentage split between the files where codes were found.
@@ -60,6 +61,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
 
 def check_all_codes_in_codelist(codes, pth, colnme, dimension):
     """
+    CHECK IF ALL YOUR DIMENSION VALUES (CODES) ARE IN A SPECIFIC CODELIST
     This methods takes a unique list of values (codes) and checks to see if they are in a specific csv codelist file (pth), column from file is sleected with colnme.
     the dimension variable is used to name the resulting file, which lists if the code has been found or not, it also looks for any Nan values.
     Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves a file called {dimension}-code-search.csv,
