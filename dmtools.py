@@ -60,7 +60,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         print(e)
 
 
-def check_all_codes_in_codelist(codes, pth, colnme, dimension):
+def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes):
     """
     CHECK IF ALL YOUR DIMENSION VALUES (CODES) ARE IN A SPECIFIC CODELIST
     This methods takes a unique list of values (codes) and checks to see if they are in a specific csv codelist file (pth), column from file is sleected with colnme.
@@ -72,6 +72,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension):
         pth: This is the path to the csv odelist file you want to search through
         colnme: This is the column within each codelist to want to search through
         dimension: This is the name of the dimension for naming output files
+        outputfoundcodes: If True then output all found code results to csv file, if False do not output found codes. 
     """
     try:
         dimension = pathify(dimension)
@@ -84,23 +85,39 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension):
             
             output = []
             for i in list2:
+                addtodf = False
                 try:
                     if pd.isna(i):
-                        output.append([i,'----NANANANANA----','ITS A NAN'])
+                        row = [i,'----NANANANANA----','ITS A NAN']
+                        addtodf = True
                     elif i in list1:
-                        output.append([i,list1[list1.index(i)],'Found'])
+                        row = [i,list1[list1.index(i)],'Found']
+                        addtodf = outputfoundcodes
                     else:
-                        output.append([i,'----','NOT FOUND'])
+                        row = [i,'----','NOT FOUND']
+                        addtodf = True
                 except Exception as e:
-                    output.append([i,'ERROR',e])
+                    row = [i,'ERROR',e]
+                    addtodf = True
+
+                if addtodf:
+                    output.append(row)
+
             output = pd.DataFrame(output)
             output = output.rename(columns={0:'Dataset Codes', 1:'Codelist Codes', 2:'Result'})
 
-            out = dimension + "-codelist-analysis"
-            if not os.path.exists(out):
-                os.mkdir(out)
-        
-            output.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
+            try:
+                cnt = output['Dataset Codes'].count()
+            except:
+                cnt = 0
+
+            if cnt > 0:
+                out = dimension + "-codelist-analysis"
+                if not os.path.exists(out):
+                    os.mkdir(out)
+                output.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
+            else:
+                print('----------------- Results are empty so no file has been output.')
         except Exception as x:
             print(x)
 
