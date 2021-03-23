@@ -112,8 +112,9 @@ def display_dataset_unique_values(dataset):
     """
     Displays all the unique values in each column of a dataset ignoring any column called Value
     """
+    excluded_values = ['Value']
     for col in dataset.columns:
-        if col not in ['Value']:
+        if col not in excluded_values:
             dataset[col] = dataset[col].astype('category')
             display(col)
             display(dataset[col].cat.categories)
