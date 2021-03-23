@@ -1,6 +1,7 @@
 import gssutils 
 import os
 import pandas as pd
+import display
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
     """
@@ -105,3 +106,14 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension):
 
     except Exception as e:
         print(e)
+
+
+def display_dataset_unique_values(dataset):
+    """
+    Displays all the unique values in each column of a dataset ignoring any column called Value
+    """
+    for col in dataset.columns:
+        if col not in ['Value']:
+            dataset[col] = dataset[col].astype('category')
+            display(col)
+            display(dataset[col].cat.categories)
