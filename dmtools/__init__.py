@@ -1,6 +1,7 @@
 import gssutils 
 import os
 import pandas as pd
+import Levenshtein as lev
 from IPython.display import display
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
@@ -56,6 +57,65 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
         filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
         filenamecount.to_csv(f'{out}/{dimension}-percentage-split.csv', index=False)
+    except Exception as e:
+        print(e)
+
+
+def search_for_codes_using_levenshtein_distance(codes, pth, colnme, dimension, setDistance, setRatio):
+    """
+    Use Levenshtein distance to fuzzy match codes with all codelists within a directory. Only output results based on values passed in setDistance and setRatio
+    This method searches through a directory of codelist csv files looking for instances of each value within the passed unique list (codes).
+    It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it found it in and the number of times it was found.
+    It also outputs a csv file giving the percentage split between the files where codes were found.
+    Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves files called:
+         1. {dimension}-code-search.csv (Columns = Code, Filename, Count)
+         2. {dimension}-percentage-split.csv (Columns = Filename, Counts, Percentage)
+    Method assumes directory only has files with extensions .csv and .csv-metadata.json.
+    This methods takes as its arguments:
+        codes: A list of unique values taken from a datasets column within a transform
+        pth: This is the path to the codelists you want to search through
+        colnme: This is the column within each codelist to want to search through
+        dimension: This is the name of the dimension for naming output files
+        setDistance: How many changes have to be made to the codelist code so it matches the source code (set as 'less than or equal to' (<=)) . I use a value of 3
+        setRatio: What ratio of similarity should the match attain (set to 'more than or equal to' in the code (>=)). I use a value of 0.7 or 0.8
+    """
+    try:
+        dimension = dimension.lower().replace(' ', '-')
+        exnot = 'csv-metadata' # This is the type of file you don't want
+        
+        print('Search Directory: ' + pth + '\n')
+        
+        entries = os.listdir(pth)     
+
+        output = []#pd.DataFrame(columns=['Source Code','Codelist Code','Filename','Distance','Ratio'])
+        for e in entries:
+            try:
+                if exnot not in e:
+                    df = pd.read_csv(pth + e)
+                    df = list(df[colnme])
+                    for l in df:
+                        for c in codes:
+                            sc = str(c)
+                            cc = str(l)
+                            distance = lev.distance(sc,cc)
+                            ratio = lev.ratio(sc,cc)
+
+                            if (distance <= setDistance) & (ratio >= setRatio):
+                                output.append([c, l, e, distance, round(ratio,2)])
+                                
+                            del distance, ratio
+            except Exception as x:
+                print(x)
+        
+        out = dimension + "-codelist-levenshtein"
+        if not os.path.exists(out):
+            os.mkdir(out)
+        
+        output = pd.DataFrame(output)
+        output = output.rename(columns={0:'Source Code', 1:'Codelist Code', 2:'Filename', 3:'Distance', 4:'Ratio'})
+        output = output.sort_values(by=['Source Code', 'Distance', 'Ratio'])
+        output.to_csv(f'{out}/{dimension}-dimension-levenshtein.csv', index=False)
+
     except Exception as e:
         print(e)
 
