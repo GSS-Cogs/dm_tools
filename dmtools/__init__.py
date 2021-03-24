@@ -21,7 +21,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         dimension: This is the name of the dimension for naming output files
     """
     try:
-        dimension = pathify(dimension)
+        #dimension = pathify(dimension)
         exnot = 'csv-metadata' # This is the type of file you don't want
         
         print('Search Directory: ' + pth + '\n')
@@ -76,7 +76,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
         outputfoundcodes: If True then output all found code results to csv file, if False do not output found codes. 
     """
     try:
-        dimension = pathify(dimension)
+        #dimension = pathify(dimension)
         print('Search File: ' + pth + '\n')   
 
         try:
