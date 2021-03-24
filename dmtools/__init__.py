@@ -1,4 +1,5 @@
 import gssutils 
+from gssutils import pathify 
 import os
 import pandas as pd
 from IPython.display import display
