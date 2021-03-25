@@ -2,6 +2,7 @@ import gssutils
 import os
 import pandas as pd
 import Levenshtein as lev
+from fuzzywuzzy import fuzz
 from IPython.display import display
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
