@@ -62,15 +62,14 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         print(e)
 
 
-def search_for_codes_using_levenshtein_distance(codes, pth, colnme, dimension, setDistance, setRatio):
+def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimension, setDistance, setRatio):
     """
-    Use Levenshtein distance to fuzzy match codes with all codelists within a directory. Only output results based on values passed in setDistance and setRatio
-    This method searches through a directory of codelist csv files looking for instances of each value within the passed unique list (codes).
+    Use Levenshtein and FuzzyWuzzy packages to fuzzy match codes with all codelists within a directory. Only output results based on values passed in setDistance and setRatio
+    This method searches through a directory of codelist csv files comparing each code within the a codelists the each of the passed code values.
     It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it found it in and the number of times it was found.
     It also outputs a csv file giving the percentage split between the files where codes were found.
-    Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves files called:
-         1. {dimension}-code-search.csv (Columns = Code, Filename, Count)
-         2. {dimension}-percentage-split.csv (Columns = Filename, Counts, Percentage)
+    Once the search has completed it creates a folder called {dimension}-codelist-levenshtein-fuzzy within your current directory and creates a file called:
+         1. {dimension}-dimension-levenshtein.csv (Columns = Source Code, Codelist Code, Filename, Distance, Ratio, Token Sort Ratio, Token Set Ratio, Partial Ratio)
     Method assumes directory only has files with extensions .csv and .csv-metadata.json.
     This methods takes as its arguments:
         codes: A list of unique values taken from a datasets column within a transform
@@ -79,16 +78,35 @@ def search_for_codes_using_levenshtein_distance(codes, pth, colnme, dimension, s
         dimension: This is the name of the dimension for naming output files
         setDistance: How many changes have to be made to the codelist code so it matches the source code (set as 'less than or equal to' (<=)) . I use a value of 3
         setRatio: What ratio of similarity should the match attain (set to 'more than or equal to' in the code (>=)). I use a value of 0.7 or 0.8
+    
+    Output Results
+        Distance:
+            Represents how many edits you would have to make to the codelist string to match it to the passed code string, this also includes lower and upper case changes
+        Ratio:
+            This represents how similar the strings are to each other
+        Token Sort Ratio:
+            This represents how similar both strings are when they are changed to lowercase, punctuation has been removed and remaining characters sorted alphabetically  
+        Token Set Ratio:
+            Can be used to see if differing strings have the same meaning
+        Partial Ratio:
+            This represents if both codes have any matching substrings
     """
     try:
-        dimension = dimension.lower().replace(' ', '-')
+        dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
         exnot = 'csv-metadata' # This is the type of file you don't want
+        setRatioPerc = setRatio * 100 # setRation should be less than or equal to 1 for Levenshtein Ratios but needs to be between 0 and 100 for FuzzyWuzzy results comparison
         
-        print('Search Directory: ' + pth + '\n')
-        
+        print('------------------------------------------------------------------')
+        print('Searching in Codelist Directory: ' + pth)
+        print('in Column: ' + colnme)
+        print('Levenshtein Distance set to : ' + str(setDistance))
+        print('Levenshtein Ratio set to : ' + str(setRatio))
+        print('FuzzyWuzzy Ratio set to : ' + str(setRatioPerc))
+        print('------------------------------------------------------------------')
+        # get the list of files in the directory
         entries = os.listdir(pth)     
-
-        output = []#pd.DataFrame(columns=['Source Code','Codelist Code','Filename','Distance','Ratio'])
+        
+        output = []
         for e in entries:
             try:
                 if exnot not in e:
@@ -100,25 +118,33 @@ def search_for_codes_using_levenshtein_distance(codes, pth, colnme, dimension, s
                             cc = str(l)
                             distance = lev.distance(sc,cc)
                             ratio = lev.ratio(sc,cc)
+                            partialRatio = fuzz.partial_ratio(sc,cc)
+                            tokenSortRatio = fuzz.token_sort_ratio(sc,cc)
+                            tokenSetRatio = fuzz.token_set_ratio(sc,cc)
 
-                            if (distance <= setDistance) & (ratio >= setRatio):
-                                output.append([c, l, e, distance, round(ratio,2)])
+                            if ((distance <= setDistance) & (ratio >= setRatio)) or (partialRatio >= setRatioPerc) or (tokenSortRatio >= setRatioPerc) or (tokenSetRatio >= setRatioPerc):
+                                output.append([c, l, e, distance, round(ratio,2), round(tokenSortRatio,2), round(tokenSetRatio,2), round(partialRatio,2)])
                                 
-                            del distance, ratio
+                            del distance, ratio, partialRatio, tokenSortRatio, tokenSetRatio
             except Exception as x:
-                print(x)
+                print('---- Loop Error: ' + str(x))
         
-        out = dimension + "-codelist-levenshtein"
+        out = dimension + "-codelist-levenshtein-fuzzy"
         if not os.path.exists(out):
             os.mkdir(out)
-        
+            
         output = pd.DataFrame(output)
-        output = output.rename(columns={0:'Source Code', 1:'Codelist Code', 2:'Filename', 3:'Distance', 4:'Ratio'})
-        output = output.sort_values(by=['Source Code', 'Distance', 'Ratio'])
+        output = output.rename(columns={0:'Source Code', 1:'Codelist Code', 2:'Filename', 3:'Distance', 4:'Ratio', 5:'Token Sort Ratio', 6:'Token Set Ratio', 7:'Partial Ratio'})
+        output = output.sort_values(by=['Source Code', 'Distance', 'Ratio', 'Partial Ratio','Token Sort Ratio','Token Set Ratio'])
+        rowCount = output['Source Code'].count()
+        print('------------------------------------------------------------------')
+        print('Outputting File: ' + f'{dimension}-dimension-levenshtein.csv with {rowCount} rows')
+        print('In Folder: ' + out)
+        print('------------------------------------------------------------------')
         output.to_csv(f'{out}/{dimension}-dimension-levenshtein.csv', index=False)
 
     except Exception as e:
-        print(e)
+        print('---- Outer Error: ' + str(e))
 
 
 def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes):
