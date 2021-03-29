@@ -276,4 +276,4 @@ def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(code
         check_all_codes_in_codelist(codes, filnme, colnme, dimension, outputfoundcodes)
     else:
         print("No codelist files found with any of the codes in folder " + pth)
-     print("************************************************************************")
+    print("************************************************************************")
