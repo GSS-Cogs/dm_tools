@@ -84,8 +84,10 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         print('In Folder: ' + out)
         print('------------------------------------------------------------------')
         filenamecount.to_csv(f'{out}/{dimension}{output_filename}', index=False)
+        return highest_scoring_codelist_file
     except Exception as e:
         print(e)
+        return ''
 
 
 def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimension, setDistance, setRatio):
