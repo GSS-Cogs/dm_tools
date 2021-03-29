@@ -9,6 +9,7 @@ from IPython.display import display
 # =======================================================
 # Global variable declaration
 output_folder = "-codelist-analysis"
+exnot = 'csv-metadata' # This is the type of file you don't want to look into
 # =======================================================
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
@@ -30,7 +31,6 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
     try:
         dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
         dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
-        exnot = 'csv-metadata' # This is the type of file you don't want
         
         print('Search Directory: ' + pth + '\n')
         
@@ -121,7 +121,6 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
     try:
         dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
         dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
-        exnot = 'csv-metadata' # This is the type of file you don't want
         setRatioPerc = setRatio * 100 # setRation should be less than or equal to 1 for Levenshtein Ratios but needs to be between 0 and 100 for FuzzyWuzzy results comparison
         
         print('------------------------------------------------------------------')
