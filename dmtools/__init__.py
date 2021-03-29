@@ -96,7 +96,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
     It records in what file it finds the instance and outputs a csv file with a list of the codes, the file it found it in and the number of times it was found.
     It also outputs a csv file giving the percentage split between the files where codes were found.
     Once the search has completed it creates a folder called {dimension}-codelist-levenshtein-fuzzy within your current directory and creates a file called:
-         1. {dimension}-dimension-levenshtein.csv (Columns = Source Code, Codelist Code, Filename, Distance, Ratio, Token Sort Ratio, Token Set Ratio, Partial Ratio)
+         1. {dimension}-dimension-levenshtein-fuzzy.csv (Columns = Source Code, Codelist Code, Filename, Distance, Ratio, Token Sort Ratio, Token Set Ratio, Partial Ratio)
     Method assumes directory only has files with extensions .csv and .csv-metadata.json.
     This methods takes as its arguments:
         codes: A list of unique values taken from a datasets column within a transform
@@ -150,7 +150,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
                             tokenSetRatio = fuzz.token_set_ratio(sc,cc)
 
                             if ((distance <= setDistance) & (ratio >= setRatio)) or (partialRatio >= setRatioPerc) or (tokenSortRatio >= setRatioPerc) or (tokenSetRatio >= setRatioPerc):
-                                output.append([c, l, e, distance, round(ratio,2), round(tokenSortRatio,2), round(tokenSetRatio,2), round(partialRatio,2)])
+                                output.append([c, l, e, distance, round(ratio,2), round(partialRatio,2), round(tokenSortRatio,2), round(tokenSetRatio,2)])
                                 
                             del distance, ratio, partialRatio, tokenSortRatio, tokenSetRatio
             except Exception as x:
@@ -161,10 +161,10 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
             os.mkdir(out)
             
         output = pd.DataFrame(output)
-        output = output.rename(columns={0:'Source Code', 1:'Codelist Code', 2:'Filename', 3:'Distance', 4:'Ratio', 5:'Token Sort Ratio', 6:'Token Set Ratio', 7:'Partial Ratio'})
+        output = output.rename(columns={0:'Source Code', 1:'Codelist Code', 2:'Filename', 3:'Distance', 4:'Ratio', 5:'Partial Ratio', 6:'Token Sort Ratio', 7:'Token Set Ratio'})
         output = output.sort_values(by=['Source Code', 'Distance', 'Ratio', 'Partial Ratio','Token Sort Ratio','Token Set Ratio'])
         rowCount = output['Source Code'].count()
-        output_filename = "-dimension-levenshtein.csv"
+        output_filename = "-dimension-levenshtein-fuzzy.csv"
         print('------------------------------------------------------------------')
         print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
         print('In Folder: ' + out)
@@ -178,7 +178,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
 def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes):
     """
     CHECK IF ALL YOUR DIMENSION VALUES (CODES) ARE IN A SPECIFIC CODELIST
-    This methods takes a unique list of values (codes) and checks to see if they are in a specific csv codelist file (pth), column from file is sleected with colnme.
+    This methods takes a unique list of values (codes) and checks to see if they are in a specific csv codelist file (pth), column from file is selected with colnme.
     the dimension variable is used to name the resulting file, which lists if the code has been found or not, it also looks for any Nan values.
     Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves a file called {dimension}-code-search.csv,
     that lists the results of the search (Columns = Dataset Codes, Codelist Codes, Result: {Found, NOT FOUND, ITS A NAN})
