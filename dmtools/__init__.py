@@ -2,6 +2,7 @@ import gssutils
 import os
 import pandas as pd
 import Levenshtein as lev
+import re
 from fuzzywuzzy import fuzz
 from IPython.display import display
 
@@ -27,7 +28,8 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         dimension: This is the name of the dimension for naming output files
     """
     try:
-        #dimension = pathify(dimension)
+        dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
+        dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
         exnot = 'csv-metadata' # This is the type of file you don't want
         
         print('Search Directory: ' + pth + '\n')
@@ -109,6 +111,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
     """
     try:
         dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
+        dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
         exnot = 'csv-metadata' # This is the type of file you don't want
         setRatioPerc = setRatio * 100 # setRation should be less than or equal to 1 for Levenshtein Ratios but needs to be between 0 and 100 for FuzzyWuzzy results comparison
         
@@ -179,7 +182,8 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
         outputfoundcodes: If True then output all found code results to csv file, if False do not output found codes. 
     """
     try:
-        #dimension = pathify(dimension)
+        dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
+        dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
         print('Search File: ' + pth + '\n')   
 
         try:
@@ -219,7 +223,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 out = dimension + output_folder
                 if not os.path.exists(out):
                     os.mkdir(out)
-                    
+
                 output_filename = '-codelist-search.csv'
                 print('------------------------------------------------------------------')
                 print('Outputting File: ' + f'{dimension}{output_filename} with {cnt} rows')
