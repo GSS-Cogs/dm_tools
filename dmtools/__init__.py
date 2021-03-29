@@ -75,6 +75,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         try:
             highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
             highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
+            print('Highest scoring file is: ' + highest_scoring_codelist_file)
         except:
             highest_scoring_codelist_file = ''
         output_filename = "-codelist-folder-search-percentage-split.csv"
