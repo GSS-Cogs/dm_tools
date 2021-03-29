@@ -9,6 +9,7 @@ from IPython.display import display
 # =======================================================
 # Global variable declaration
 output_folder = "-codelist-analysis"
+highest_scoring_codelist_file = ''
 # =======================================================
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
@@ -70,6 +71,12 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         filenamecount = pd.DataFrame(output['Filename'])
         filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
         filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
+        highest_scoring_codelist_file = ''
+        try
+            highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
+            highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
+        except:
+            highest_scoring_codelist_file = ''
         output_filename = "-codelist-folder-search-percentage-split.csv"
         print('------------------------------------------------------------------')
         print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
@@ -249,3 +256,18 @@ def display_dataset_unique_values(dataset):
             dataset[col] = dataset[col].astype('category')
             display(col)
             display(dataset[col].cat.categories)
+
+
+def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(codes, pth, colnme, dimension, outputfoundcodes):
+    """
+    Check a whole folder full of codelists against a set of codes and then, if found, look at the highest scoring csv codelist file
+
+    """
+    print("Seaching codelist folder________________________")
+    search_codelists_for_codes(codes, pth, colnme, dimension)
+
+    if len(highest_scoring_codelist_file) > 0:
+        print(f"Seaching codelist file {highest_scoring_codelist_file}________________________")
+        check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
+    else:
+        print("No codelist files found with any of the codes________________________")
