@@ -213,6 +213,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
             try:
                 cnt = output['Dataset Codes'].count()
             except:
+                print('Output dataset has 0 rows or thier has been an error!')
                 cnt = 0
 
             if cnt > 0:
