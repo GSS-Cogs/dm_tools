@@ -73,7 +73,6 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         try:
             highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
             highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
-            print('Highest scoring file is: ' + highest_scoring_codelist_file)
         except:
             highest_scoring_codelist_file = ''
         output_filename = "-codelist-folder-search-percentage-split.csv"
@@ -264,11 +263,12 @@ def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(code
     Check a whole folder full of codelists against a set of codes and then, if found, look at the highest scoring csv codelist file
 
     """
-    print("Seaching codelist folder________________________")
+    print("Seaching codelist folder for codes")
     filnme = search_codelists_for_codes(codes, pth, colnme, dimension)
 
     if len(filnme) > 0:
+        print("Seaching codes against codelisr file: " + filnme)
         filnme = pth + filnme
         check_all_codes_in_codelist(codes, filnme, colnme, dimension, outputfoundcodes)
     else:
-        print("No codelist files found with any of the codes________________________")
+        print("No codelist files found with any of the codes in folder " + pth)
