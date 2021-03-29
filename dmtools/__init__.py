@@ -219,11 +219,10 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 out = dimension + output_folder
                 if not os.path.exists(out):
                     os.mkdir(out)
-                
-                rowCount = output['Dataset Codes'].count()
+                    
                 output_filename = '-codelist-search.csv'
                 print('------------------------------------------------------------------')
-                print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
+                print('Outputting File: ' + f'{dimension}{output_filename} with {cnt} rows')
                 print('In Folder: ' + out)
                 print('------------------------------------------------------------------')
                 output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
