@@ -269,6 +269,6 @@ def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(code
 
     if len(filnme) > 0:
         filnme = pth + filnme
-        check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
+        check_all_codes_in_codelist(codes, filnme, colnme, dimension, outputfoundcodes)
     else:
         print("No codelist files found with any of the codes________________________")
