@@ -213,7 +213,6 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
             try:
                 cnt = output['Dataset Codes'].count()
             except:
-                print('Output dataset has 0 rows or thier has been an error!')
                 cnt = 0
 
             if cnt > 0:
@@ -221,7 +220,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 if not os.path.exists(out):
                     os.mkdir(out)
                 
-                rowCount = output['Source Code'].count()
+                rowCount = output['Dataset Codes'].count()
                 output_filename = '-codelist-search.csv'
                 print('------------------------------------------------------------------')
                 print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
