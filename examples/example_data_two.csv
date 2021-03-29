@@ -1,0 +1,61 @@
+Value,Period,CDID,Weights 2018,Sector,Industry
+103,2015,L2KL,6.0,agriculture,agriculture-forestry-fishing
+96,2015,L2KR,11.0,production,mining-quarrying-including-oil-and-gas-extraction
+96,2015,L2KX,101.0,production,manufacturing
+99,2015,L2MW,14.0,production,electricity-gas-steam-and-air
+93,2015,L2N2,13.0,production,water-supply-sewerage-etc
+96,2015,L2KQ,139.0,production,total-production
+90,2015,L2N8,64.0,construction,construction
+92,2015,L2PZ,134.0,production,distribution-hotels-and-restaurants
+91,2015,KI8M,106.0,production,transport-storage-and-communications
+95,2015,KI8O,332.0,service-industries,business-services-and-finance
+99,2015,KI8Q,218.0,service-industries,government-other-services
+95,2015,L2NC,790.0,service-industries,total-services
+102,2015 Q1,L2KL,6.0,agriculture,agriculture-forestry-fishing
+91,2015 Q1,L2KR,11.0,production,mining-quarrying-including-oil-and-gas-extraction
+97,2015 Q1,L2KX,101.0,production,manufacturing
+100,2015 Q1,L2MW,14.0,production,electricity-gas-steam-and-air
+90,2015 Q1,L2N2,13.0,production,water-supply-sewerage-etc
+96,2015 Q1,L2KQ,139.0,production,total-production
+89,2015 Q1,L2N8,64.0,construction,construction
+91,2015 Q1,L2PZ,134.0,production,distribution-hotels-and-restaurants
+90,2015 Q1,KI8M,106.0,production,transport-storage-and-communications
+94,2015 Q1,KI8O,332.0,service-industries,business-services-and-finance
+98,2015 Q1,KI8Q,218.0,service-industries,government-other-services
+94,2015 Q1,L2NC,790.0,service-industries,total-services
+103,2015 Q2,L2KL,6.0,agriculture,agriculture-forestry-fishing
+101,2015 Q2,L2KR,11.0,production,mining-quarrying-including-oil-and-gas-extraction
+96,2015 Q2,L2KX,101.0,production,manufacturing
+99,2015 Q2,L2MW,14.0,production,electricity-gas-steam-and-air
+93,2015 Q2,L2N2,13.0,production,water-supply-sewerage-etc
+97,2015 Q2,L2KQ,139.0,production,total-production
+90,2015 Q2,L2N8,64.0,construction,construction
+92,2015 Q2,L2PZ,134.0,production,distribution-hotels-and-restaurants
+91,2015 Q2,KI8M,106.0,production,transport-storage-and-communications
+95,2015 Q2,KI8O,332.0,service-industries,business-services-and-finance
+99,2015 Q2,KI8Q,218.0,service-industries,government-other-services
+95,2015 Q2,L2NC,790.0,service-industries,total-services
+103,2015 Q3,L2KL,6.0,agriculture,agriculture-forestry-fishing
+98,2015 Q3,L2KR,11.0,production,mining-quarrying-including-oil-and-gas-extraction
+95,2015 Q3,L2KX,101.0,production,manufacturing
+100,2015 Q3,L2MW,14.0,production,electricity-gas-steam-and-air
+94,2015 Q3,L2N2,13.0,production,water-supply-sewerage-etc
+96,2015 Q3,L2KQ,139.0,production,total-production
+90,2015 Q3,L2N8,64.0,construction,construction
+93,2015 Q3,L2PZ,134.0,production,distribution-hotels-and-restaurants
+92,2015 Q3,KI8M,106.0,production,transport-storage-and-communications
+95,2015 Q3,KI8O,332.0,service-industries,business-services-and-finance
+99,2015 Q3,KI8Q,218.0,service-industries,government-other-services
+95,2015 Q3,L2NC,790.0,service-industries,total-services
+103,2015 Q4,L2KL,6.0,agriculture,agriculture-forestry-fishing
+94,2015 Q4,L2KR,11.0,production,mining-quarrying-including-oil-and-gas-extraction
+95,2015 Q4,L2KX,101.0,production,manufacturing
+98,2015 Q4,L2MW,14.0,production,electricity-gas-steam-and-air
+94,2015 Q4,L2N2,13.0,production,water-supply-sewerage-etc
+95,2015 Q4,L2KQ,139.0,production,total-production
+91,2015 Q4,L2N8,64.0,construction,construction
+93,2015 Q4,L2PZ,134.0,production,distribution-hotels-and-restaurants
+92,2015 Q4,KI8M,106.0,production,transport-storage-and-communications
+96,2015 Q4,KI8O,332.0,service-industries,business-services-and-finance
+100,2015 Q4,KI8Q,218.0,service-industries,government-other-services
+96,2015 Q4,L2NC,790.0,service-industries,total-services

@@ -1,0 +1,5 @@
+Label,Notation,Parent Notation,Sort Priority,Description
+Goods,goods,all,1,
+Services,services,all,2,
+Goods and Services,goods-and-services,all,3,
+All,all,,4,
