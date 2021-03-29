@@ -1,0 +1,41 @@
+Value,Period,CDID,Estimate Type,Aggregate
+1919641,2015,YBHA,current-price,gross-domestic-product-at-market-prices
+207569,2015,NTAP,current-price,less-basic-price-adjustment
+1712072,2015,ABML,current-price,gross-value-added-at-basic-prices
+2043909,2015,ABMI,current-price,gross-domestic-product-at-market-prices
+221355,2015,NTAO,chained-volume-measure,less-basic-price-adjustment
+1822556,2015,ABMM,chained-volume-measure,gross-value-added-at-basic-prices
+1806437,2015,KLS2,chained-volume-measure,gross-value-added-excluding-oil-gas
+164738,2015,KLS2,basic-prices,gross-value-added-excluding-oil-gas
+473838,2015 Q1,YBHA,current-price,gross-domestic-product-at-market-prices
+50777,2015 Q1,NTAP,current-price,less-basic-price-adjustment
+423061,2015 Q1,ABML,current-price,gross-value-added-at-basic-prices
+506314,2015 Q1,ABMI,current-price,gross-domestic-product-at-market-prices
+54612,2015 Q1,NTAO,chained-volume-measure,less-basic-price-adjustment
+451705,2015 Q1,ABMM,chained-volume-measure,gross-value-added-at-basic-prices
+447993,2015 Q1,KLS2,chained-volume-measure,gross-value-added-excluding-oil-gas
+434238,2015 Q1,KLS2,basic-prices,gross-value-added-excluding-oil-gas
+480944,2015 Q2,YBHA,current-price,gross-domestic-product-at-market-prices
+51705,2015 Q2,NTAP,current-price,less-basic-price-adjustment
+429239,2015 Q2,ABML,current-price,gross-value-added-at-basic-prices
+510095,2015 Q2,ABMI,current-price,gross-domestic-product-at-market-prices
+55147,2015 Q2,NTAO,chained-volume-measure,less-basic-price-adjustment
+454949,2015 Q2,ABMM,chained-volume-measure,gross-value-added-at-basic-prices
+450690,2015 Q2,KLS2,chained-volume-measure,gross-value-added-excluding-oil-gas
+473728,2015 Q2,KLS2,basic-prices,gross-value-added-excluding-oil-gas
+481713,2015 Q3,YBHA,current-price,gross-domestic-product-at-market-prices
+52450,2015 Q3,NTAP,current-price,less-basic-price-adjustment
+429263,2015 Q3,ABML,current-price,gross-value-added-at-basic-prices
+512070,2015 Q3,ABMI,current-price,gross-domestic-product-at-market-prices
+55454,2015 Q3,NTAO,chained-volume-measure,less-basic-price-adjustment
+456617,2015 Q3,ABMM,chained-volume-measure,gross-value-added-at-basic-prices
+452455,2015 Q3,KLS2,chained-volume-measure,gross-value-added-excluding-oil-gas
+473829,2015 Q3,KLS2,basic-prices,gross-value-added-excluding-oil-gas
+483146,2015 Q4,YBHA,current-price,gross-domestic-product-at-market-prices
+52637,2015 Q4,NTAP,current-price,less-basic-price-adjustment
+430509,2015 Q4,ABML,current-price,gross-value-added-at-basic-prices
+515430,2015 Q4,ABMI,current-price,gross-domestic-product-at-market-prices
+56142,2015 Q4,NTAO,chained-volume-measure,less-basic-price-adjustment
+459285,2015 Q4,ABMM,chained-volume-measure,gross-value-added-at-basic-prices
+455299,2015 Q4,KLS2,chained-volume-measure,gross-value-added-excluding-oil-gas
+473640,2015 Q4,KLS2,basic-prices,gross-value-added-excluding-oil-gas

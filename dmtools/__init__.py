@@ -5,6 +5,11 @@ import Levenshtein as lev
 from fuzzywuzzy import fuzz
 from IPython.display import display
 
+# =======================================================
+# Global variable declaration
+output_folder = "-codelist-analysis"
+# =======================================================
+
 def search_codelists_for_codes(codes, pth, colnme, dimension):
     """
     CHECK IF ANY OF YOUR DIMENSION VALUES (CODES) ARE ALREADY DEFINED IN A CODELIST(S)
@@ -44,7 +49,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
             except Exception as x:
                 print(x)
 
-        out = dimension + "-codelist-analysis"
+        out = dimension + output_folder
         if not os.path.exists(out):
             os.mkdir(out)
 
@@ -52,12 +57,23 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         unq = output.groupby('Code').count()
         output = pd.merge(output, unq, on='Code')
         output = output.rename(columns={'Filename_x': 'Filename', 'Filename_y': 'Count'})
-        output.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
+        rowCount = output['Filename'].count()
+        output_filename = '-codelist-folder-search.csv'
+        print('------------------------------------------------------------------')
+        print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
+        print('In Folder: ' + out)
+        print('------------------------------------------------------------------')
+        output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
         
         filenamecount = pd.DataFrame(output['Filename'])
         filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
         filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
-        filenamecount.to_csv(f'{out}/{dimension}-percentage-split.csv', index=False)
+        output_filename = "-codelist-folder-search-percentage-split.csv"
+        print('------------------------------------------------------------------')
+        print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
+        print('In Folder: ' + out)
+        print('------------------------------------------------------------------')
+        filenamecount.to_csv(f'{out}/{dimension}{output_filename}', index=False)
     except Exception as e:
         print(e)
 
@@ -81,7 +97,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
     
     Output Results
         Distance:
-            Represents how many edits you would have to make to the codelist string to match it to the passed code string, this also includes lower and upper case changes
+            Represents how many edits you would have to make to the codelist string to match it to the compared code string, also includes lower and upper case changes
         Ratio:
             This represents how similar the strings are to each other
         Token Sort Ratio:
@@ -129,7 +145,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
             except Exception as x:
                 print('---- Loop Error: ' + str(x))
         
-        out = dimension + "-codelist-levenshtein-fuzzy"
+        out = dimension + output_folder
         if not os.path.exists(out):
             os.mkdir(out)
             
@@ -137,11 +153,12 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
         output = output.rename(columns={0:'Source Code', 1:'Codelist Code', 2:'Filename', 3:'Distance', 4:'Ratio', 5:'Token Sort Ratio', 6:'Token Set Ratio', 7:'Partial Ratio'})
         output = output.sort_values(by=['Source Code', 'Distance', 'Ratio', 'Partial Ratio','Token Sort Ratio','Token Set Ratio'])
         rowCount = output['Source Code'].count()
+        output_filename = "-dimension-levenshtein.csv"
         print('------------------------------------------------------------------')
-        print('Outputting File: ' + f'{dimension}-dimension-levenshtein.csv with {rowCount} rows')
+        print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
         print('In Folder: ' + out)
         print('------------------------------------------------------------------')
-        output.to_csv(f'{out}/{dimension}-dimension-levenshtein.csv', index=False)
+        output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
 
     except Exception as e:
         print('---- Outer Error: ' + str(e))
@@ -199,10 +216,17 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 cnt = 0
 
             if cnt > 0:
-                out = dimension + "-codelist-analysis"
+                out = dimension + output_folder
                 if not os.path.exists(out):
                     os.mkdir(out)
-                output.to_csv(f'{out}/{dimension}-code-search.csv', index=False)
+                
+                rowCount = output['Source Code'].count()
+                output_filename = '-codelist-search.csv'
+                print('------------------------------------------------------------------')
+                print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
+                print('In Folder: ' + out)
+                print('------------------------------------------------------------------')
+                output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
             else:
                 print('----------------- Results are empty so no file has been output.')
         except Exception as x:
