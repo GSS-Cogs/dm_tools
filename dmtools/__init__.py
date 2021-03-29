@@ -49,7 +49,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
                         fnd['Filename'] = e
                         output = pd.concat([output,fnd])
             except Exception as x:
-                print('---- Loop Error: ' + str(x))
+                print('---- Loop Error: ' + str(x) + ' - in file: ' + str(e))
 
         out = dimension + output_folder
         if not os.path.exists(out):
@@ -70,11 +70,13 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         filenamecount = pd.DataFrame(output['Filename'])
         filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
         filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
+
         try:
             highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
             highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
         except:
             highest_scoring_codelist_file = ''
+
         output_filename = "-codelist-folder-search-percentage-split.csv"
         print('------------------------------------------------------------------')
         print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
@@ -153,7 +155,7 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
                                 
                             del distance, ratio, partialRatio, tokenSortRatio, tokenSetRatio
             except Exception as x:
-                print('---- Loop Error: ' + str(x))
+                print('---- Loop Error: ' + str(x) + ' - in file: ' + str(e))
         
         out = dimension + output_folder
         if not os.path.exists(out):
@@ -261,14 +263,17 @@ def display_dataset_unique_values(dataset):
 def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(codes, pth, colnme, dimension, outputfoundcodes):
     """
     Check a whole folder full of codelists against a set of codes and then, if found, look at the highest scoring csv codelist file
+    If files have the same score it will pick the top one
 
     """
     print("Seaching codelist folder for codes")
+    print("************************************************************************")
     filnme = search_codelists_for_codes(codes, pth, colnme, dimension)
-
+    print("************************************************************************")
     if len(filnme) > 0:
-        print("Seaching codes against codelisr file: " + filnme)
+        print("Seaching codes against codelist file: " + filnme)
         filnme = pth + filnme
         check_all_codes_in_codelist(codes, filnme, colnme, dimension, outputfoundcodes)
     else:
         print("No codelist files found with any of the codes in folder " + pth)
+     print("************************************************************************")
