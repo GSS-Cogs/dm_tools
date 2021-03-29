@@ -50,7 +50,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
                         fnd['Filename'] = e
                         output = pd.concat([output,fnd])
             except Exception as x:
-                print(x)
+                print('---- Loop Error: ' + str(x))
 
         out = dimension + output_folder
         if not os.path.exists(out):
@@ -72,7 +72,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
         filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
         highest_scoring_codelist_file = ''
-        try
+        try:
             highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
             highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
         except:
@@ -243,7 +243,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
             print(x)
 
     except Exception as e:
-        print(e)
+        print('---- Loop Error: ' + str(e))
 
 
 def display_dataset_unique_values(dataset):
