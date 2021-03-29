@@ -9,7 +9,6 @@ from IPython.display import display
 # =======================================================
 # Global variable declaration
 output_folder = "-codelist-analysis"
-highest_scoring_codelist_file = ''
 # =======================================================
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
@@ -71,7 +70,6 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         filenamecount = pd.DataFrame(output['Filename'])
         filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
         filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
-        highest_scoring_codelist_file = ''
         try:
             highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
             highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
@@ -267,10 +265,10 @@ def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(code
 
     """
     print("Seaching codelist folder________________________")
-    search_codelists_for_codes(codes, pth, colnme, dimension)
+    filnme = search_codelists_for_codes(codes, pth, colnme, dimension)
 
-    if len(highest_scoring_codelist_file) > 0:
-        print(f"Seaching codelist file {highest_scoring_codelist_file}________________________")
+    if len(filnme) > 0:
+        print(f"Seaching codelist file {filnme}________________________")
         check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
     else:
         print("No codelist files found with any of the codes________________________")
