@@ -293,4 +293,19 @@ def remove_superscripts_from_dimension(dataset, dimension):
     except Exception as e:
         print('Remove Superscripts Error: ' + str(e))
         return dataset
-  
+
+
+def convet_dimension_to_integer(dataset, dimension):
+    """
+    Converts a dimension to integers taking care of NaNs and empty strings, i hope!
+    """
+    try:
+        dataset[dimension] = dataset[dimension].fillna(-1)
+        dataset[dimension] = dataset[dimension].replace('',-1)
+        dataset[dimension] = dataset[dimension].astype(int)
+        dataset[dimension] = dataset[dimension].astype(str)
+        dataset[dimension] = dataset[dimension].replace('-1', np.nan)
+        return dataset
+    except Exception as e:
+        print('strip_superscripts error: ' + str(e))
+        return dataset
