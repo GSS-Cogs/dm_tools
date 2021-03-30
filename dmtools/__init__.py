@@ -276,3 +276,21 @@ def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(code
         print("No codelist files found with any of the codes in folder " + pth)
     print("************************************************************************")
 
+
+def remove_superscripts_from_dimension(dataset, dimension):
+    """
+    Strips the numbers 1 to 10 as well as 1 to 10 plus a , (comma) and then strips any white space.
+    This will also remove numbers that are genuinely part of the string
+    """
+    try:
+        for x in range(1, 11):
+            comnum = str(x) + ','
+            dataset[dimension] = dataset[dimension].str.replace(comnum, '', regex=False) 
+            dataset[dimension] = dataset[dimension].str.replace(str(x), '', regex=False) 
+            dataset[dimension] = dataset[dimension].str.strip()
+            
+        return dataset
+    except Exception as e:
+        print('Remove Superscripts Error: ' + str(e))
+        return dataset
+  
