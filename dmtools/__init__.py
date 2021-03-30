@@ -261,7 +261,7 @@ def display_dataset_unique_values(dataset):
 
 def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(codes, pth, colnme, dimension, outputfoundcodes):
     """
-    Check a whole folder full of codelists against a set of codes and then, if found, look at the highest scoring csv codelist file
+    Check a whole folder full of codelists against a set of codes and then, if any have been found, look at the highest scoring csv codelist file
     If there is more than one file with the same score then the top one is picked
     """
     print("Seaching codelist folder for codes")
@@ -275,3 +275,4 @@ def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(code
     else:
         print("No codelist files found with any of the codes in folder " + pth)
     print("************************************************************************")
+
