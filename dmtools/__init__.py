@@ -21,7 +21,7 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
     It also outputs a csv file giving the percentage split between the files where codes were found.
     Once the search has completed it creates a folder called {dimension}-codelist-analysis within your current directory and saves files called:
          1. {dimension}-code-search.csv (Columns = Code, Filename, Count)
-         2. {dimension}-percentage-split.csv (Columns = Filename, Counts, Percentage)
+         2. {dimension}-percentage-split.csv (Columns = Filename, Codes Looking For, Codes Found, Percentage)
     Method assumes directory only has files with extensions .csv and .csv-metadata.json.
     This methods takes as its arguments:
         codes: A list of unique values taken from a datasets column within a transform
@@ -30,10 +30,14 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
         dimension: This is the name of the dimension for naming output files
     """
     try:
-        dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
-        dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
+        codes = list(set(codes))
         
         print('Search Directory: ' + pth + '\n')
+        print('Dimension: ' + dimension)
+        print(long_dotted_line)
+        
+        dimension = dimension.lower().replace(' ', '-') # Remove stuff from dimension (if any) so the filename is nice and lovely
+        dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
         
         entries = os.listdir(pth)     
 
@@ -50,40 +54,48 @@ def search_codelists_for_codes(codes, pth, colnme, dimension):
                         fnd['Filename'] = e
                         output = pd.concat([output,fnd])
             except Exception as x:
-                print('---- Loop Error: ' + str(x) + ' - in file: ' + str(e))
+                # Ignore directory errors
+                if 'Is a directory:' not in str(x):
+                    print('---- Loop Error: ' + str(x) + ' - in file: ' + str(e))
 
-        out = dimension + output_folder
-        if not os.path.exists(out):
-            os.mkdir(out)
+        if (output.shape[0] > 0):
+            out = dimension + output_folder
+            if not os.path.exists(out):
+                os.mkdir(out)
 
-        output = output.sort_values(by=['Code'])
-        unq = output.groupby('Code').count()
-        output = pd.merge(output, unq, on='Code')
-        output = output.rename(columns={'Filename_x': 'Filename', 'Filename_y': 'Count'})
-        rowCount = output['Filename'].count()
-        output_filename = '-codelist-folder-search.csv'
-        print('------------------------------------------------------------------')
-        print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
-        print('In Folder: ' + out)
-        print('------------------------------------------------------------------')
-        output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
+            output = output.sort_values(by=['Code'])
+            unq = output.groupby('Code').count()
+            output = pd.merge(output, unq, on='Code')
+            output = output.rename(columns={'Filename_x': 'Filename', 'Filename_y': 'Count'})
+            rowCount = output['Filename'].count()
+            output_filename = '-codelist-folder-search.csv'
+            print(long_dotted_line)
+            print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
+            print('In Folder: ' + out)
+            print(long_dotted_line)
+            output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
         
-        filenamecount = pd.DataFrame(output['Filename'])
-        filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Counts')
-        filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
+            filenamecount = pd.DataFrame(output['Filename'])
+            filenamecount = filenamecount.groupby(['Filename']).size().reset_index(name='Codes Found')
+            filenamecount['Total Codes'] = len(codes)
+            #filenamecount['Percentage'] = ((filenamecount['Counts'] / filenamecount.Counts.sum()) * 100).round(2)
+            filenamecount['Percentage Found'] = ((filenamecount['Codes Found'] / filenamecount['Total Codes']) * 100).round(2)
+            filenamecount = filenamecount.sort_values(by=['Percentage Found'], ascending=False)
+            #filenamecount = filenamecount.rename(columns={'Counts':'Codes Found'})
+            try:
+                highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage Found']==filenamecount['Percentage Found'].max()])
+                highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
+            except:
+                highest_scoring_codelist_file = ''
 
-        try:
-            highest_scoring_codelist_file = pd.DataFrame(filenamecount['Filename'][filenamecount['Percentage']==filenamecount['Percentage'].max()])
-            highest_scoring_codelist_file = str(filenamecount.iloc[0,0])
-        except:
+            output_filename = "-codelist-folder-search-percentage-split.csv"
+            print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
+            print('In Folder: ' + out)
+            print(long_dotted_line)
+            filenamecount.to_csv(f'{out}/{dimension}{output_filename}', index=False)
+        else:
+            print('No codes have been found during search.')
             highest_scoring_codelist_file = ''
-
-        output_filename = "-codelist-folder-search-percentage-split.csv"
-        print('------------------------------------------------------------------')
-        print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
-        print('In Folder: ' + out)
-        print('------------------------------------------------------------------')
-        filenamecount.to_csv(f'{out}/{dimension}{output_filename}', index=False)
         return highest_scoring_codelist_file
     except Exception as e:
         print(e)
@@ -124,13 +136,13 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
         dimension = re.sub('[^A-Za-z0-9]+', '',  dimension)
         setRatioPerc = setRatio * 100 # setRation should be less than or equal to 1 for Levenshtein Ratios but needs to be between 0 and 100 for FuzzyWuzzy results comparison
         
-        print('------------------------------------------------------------------')
+        print(long_dotted_line)
         print('Searching in Codelist Directory: ' + pth)
         print('in Column: ' + colnme)
         print('Levenshtein Distance set to : ' + str(setDistance))
         print('Levenshtein Ratio set to : ' + str(setRatio))
         print('FuzzyWuzzy Ratio set to : ' + str(setRatioPerc))
-        print('------------------------------------------------------------------')
+        print(long_dotted_line)
         # get the list of files in the directory
         entries = os.listdir(pth)     
         
@@ -166,10 +178,10 @@ def search_for_codes_using_levenshtein_and_fuzzywuzzy(codes, pth, colnme, dimens
         output = output.sort_values(by=['Source Code', 'Distance', 'Ratio', 'Partial Ratio','Token Sort Ratio','Token Set Ratio'])
         rowCount = output['Source Code'].count()
         output_filename = "-dimension-levenshtein-fuzzy.csv"
-        print('------------------------------------------------------------------')
+        print(long_dotted_line)
         print('Outputting File: ' + f'{dimension}{output_filename} with {rowCount} rows')
         print('In Folder: ' + out)
-        print('------------------------------------------------------------------')
+        print(long_dotted_line)
         output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
 
     except Exception as e:
@@ -234,10 +246,10 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                     os.mkdir(out)
 
                 output_filename = '-codelist-search.csv'
-                print('------------------------------------------------------------------')
+                print(long_dotted_line)
                 print('Outputting File: ' + f'{dimension}{output_filename} with {cnt} rows')
                 print('In Folder: ' + out)
-                print('------------------------------------------------------------------')
+                print(long_dotted_line)
                 output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
             else:
                 print('----------------- Results are empty so no file has been output.')
@@ -253,11 +265,17 @@ def display_dataset_unique_values(dataset):
     Displays all the unique values in each column of a dataset ignoring any column called Value
     """
     excluded_values = ['Value']
+    print("Number of rows: " + str(dataset.shape[0]))
+    print("Number of columns: " + str(dataset.shape[1]))
+    print("Column names: ")
+    print(dataset.columns)
+    display(long_dotted_line)
     for col in dataset.columns:
         if col not in excluded_values:
             dataset[col] = dataset[col].astype('category')
             display(col)
-            display(dataset[col].cat.categories)
+            display(list(dataset[col].cat.categories))
+            display(long_dotted_line)
 
 
 def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(codes, pth, colnme, dimension, outputfoundcodes):
@@ -296,7 +314,7 @@ def remove_superscripts_from_dimension(dataset, dimension):
         return dataset
 
 
-def convet_dimension_to_integer(dataset, dimension):
+def convert_dimension_to_integer(dataset, dimension):
     """
     Converts a dimension to integers taking care of NaNs and empty strings, i hope!
     """
@@ -308,5 +326,5 @@ def convet_dimension_to_integer(dataset, dimension):
         dataset[dimension] = dataset[dimension].replace('-1', np.nan)
         return dataset
     except Exception as e:
-        print('strip_superscripts error: ' + str(e))
+        print('Convert Dimension to Integer: ' + str(e))
         return dataset
