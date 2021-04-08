@@ -8,6 +8,8 @@ from fuzzywuzzy import fuzz
 from IPython.display import display
 
 # =======================================================
+# This code follows the KISS methodology. If it works its fine, leave it alone!
+# =======================================================
 # Global variable declaration
 output_folder = "-codelist-analysis"
 exnot = 'csv-metadata' # This is the type of file you don't want to look into
