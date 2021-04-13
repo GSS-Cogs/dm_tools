@@ -13,6 +13,7 @@ from IPython.display import display
 # Global variable declaration
 output_folder = "-codelist-analysis"
 exnot = 'csv-metadata' # This is the type of file you don't want to look into
+long_dotted_line = "=================================================================================="
 # =======================================================
 
 def search_codelists_for_codes(codes, pth, colnme, dimension):
