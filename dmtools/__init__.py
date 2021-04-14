@@ -1,4 +1,4 @@
-import gssutils 
+from gssutils import *
 import os
 import pandas as pd
 import Levenshtein as lev
@@ -281,6 +281,42 @@ def display_dataset_unique_values(dataset):
             display(long_dotted_line)
 
 
+def add_missing_codes_to_codelist(missing_file_path, codelist_path):
+    """
+    If you have missing codes in a file output from the method check_all_codes_in_codelist you 
+    can automatically add them to the codelist file using this one.
+    """
+    try:
+        missingcodes = pd.read_csv(missing_file_path)
+        print('Missing codes: ' + str(missingcodes['Dataset Codes'].count()))
+        missingcodes = missingcodes[['Dataset Codes']]
+        missingcodes['Dataset Codes'] = missingcodes['Dataset Codes'].apply(pathify)
+        missingcodes['Label'] = missingcodes['Dataset Codes'].str.replace('-',' ').str.capitalize()
+        missingcodes['Parent Notation'] = np.nan
+        missingcodes['Sort Priority'] = ''
+        missingcodes = missingcodes.rename(columns={'Dataset Codes':'Notation'})
+
+        codelist = pd.read_csv(codelist_path)
+        if 'Description' in codelist.columns:
+            missingcodes['Description'] = np.nan
+        codelist['Sort Priority'] = ''
+
+        try:
+            newcodelist = pd.concat([codelist, missingcodes])
+            newcodelist = newcodelist[['Label','Notation','Parent Notation','Sort Priority','Description']]
+            newcodelist = newcodelist.drop_duplicates()
+            newcodelist['Sort Priority'] = np.arange(newcodelist.shape[0]) + 1
+            newcodelist.to_csv(codelist_path, index=False)
+            print('New codes have been added to file: ')
+            print(codelist_path)
+            return newcodelist
+        except Exception as e:
+            print('Something went wrong adding new codelists: ' + e)
+    except Exception as e:
+        print('Error: ' + e)
+    
+
+    
 def search_codes_in_codelists_and_then_search_highest_scoring_codelist_file(codes, pth, colnme, dimension, outputfoundcodes):
     """
     Check a whole folder full of codelists against a set of codes and then, if any have been found, look at the highest scoring csv codelist file
