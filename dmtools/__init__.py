@@ -260,11 +260,11 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 return 'No results'
         except Exception as x:
             print(x)
-            return x
+            return str(x)
 
     except Exception as e:
         print('---- Loop Error: ' + str(e))
-        return e
+        return str(e)
 
 
 def display_dataset_unique_values(dataset):
@@ -293,22 +293,25 @@ def add_missing_codes_to_codelist(missing_file_path, codelist_path):
     try:
         missingcodes = pd.read_csv(missing_file_path)
         print('Missing codes: ' + str(missingcodes['Dataset Codes'].count()))
-        missingcodes = missingcodes.loc(missingcodes['Result'] == 'NOT FOUND')
+        missingcodes = missingcodes.loc[missingcodes['Result'] == 'NOT FOUND']  
         missingcodes = missingcodes[['Dataset Codes']]
         missingcodes['Dataset Codes'] = missingcodes['Dataset Codes'].apply(pathify)
         missingcodes['Label'] = missingcodes['Dataset Codes'].str.replace('-',' ').str.capitalize()
         missingcodes['Parent Notation'] = np.nan
         missingcodes['Sort Priority'] = ''
         missingcodes = missingcodes.rename(columns={'Dataset Codes':'Notation'})
-
+        
         codelist = pd.read_csv(codelist_path)
         if 'Description' in codelist.columns:
             missingcodes['Description'] = np.nan
         codelist['Sort Priority'] = ''
-
+        
         try:
             newcodelist = pd.concat([codelist, missingcodes])
-            newcodelist = newcodelist[['Label','Notation','Parent Notation','Sort Priority','Description']]
+            if 'Description' in codelist.columns:
+                newcodelist = newcodelist[['Label','Notation','Parent Notation','Sort Priority','Description']]
+            else:
+                newcodelist = newcodelist[['Label','Notation','Parent Notation','Sort Priority']]
             newcodelist = newcodelist.drop_duplicates()
             newcodelist['Sort Priority'] = np.arange(newcodelist.shape[0]) + 1
             newcodelist.to_csv(codelist_path, index=False)
@@ -316,9 +319,11 @@ def add_missing_codes_to_codelist(missing_file_path, codelist_path):
             print(codelist_path)
             return newcodelist
         except Exception as e:
-            print('Something went wrong adding new codelists: ' + e)
+            print('Something went wrong adding new codelists: ' + str(e))
+            return str(e)
+        
     except Exception as e:
-        print('Error: ' + e)
+        print('Error: ' + str(e))
     
 
     
