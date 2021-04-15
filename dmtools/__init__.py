@@ -292,8 +292,8 @@ def add_missing_codes_to_codelist(missing_file_path, codelist_path):
     """
     try:
         missingcodes = pd.read_csv(missing_file_path)
-        print('Missing codes: ' + str(missingcodes['Dataset Codes'].count()))
         missingcodes = missingcodes.loc[missingcodes['Result'] == 'NOT FOUND']  
+        print('Missing codes: ' + str(missingcodes['Dataset Codes'].count()))
         missingcodes = missingcodes[['Dataset Codes']]
         missingcodes['Dataset Codes'] = missingcodes['Dataset Codes'].apply(pathify)
         missingcodes['Label'] = missingcodes['Dataset Codes'].str.replace('-',' ').str.capitalize()
