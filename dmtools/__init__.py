@@ -254,7 +254,7 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 print('In Folder: ' + out)
                 print(long_dotted_line)
                 output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
-                return f'{out}/{dimension}{output_filename}
+                return f'{out}/{dimension}{output_filename}'
             else:
                 print('----------------- Results are empty so no file has been output.')
                 return 'No results'
