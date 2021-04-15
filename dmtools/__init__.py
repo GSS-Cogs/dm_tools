@@ -288,7 +288,7 @@ def display_dataset_unique_values(dataset):
 def add_missing_codes_to_codelist(missing_file_path, codelist_path):
     """
     If you have missing codes in a file output from the method check_all_codes_in_codelist you 
-    can automatically add them to the codelist file using this one.
+    can automatically add them to the codelist file using this method.
     """
     try:
         missingcodes = pd.read_csv(missing_file_path)
@@ -317,10 +317,8 @@ def add_missing_codes_to_codelist(missing_file_path, codelist_path):
             newcodelist.to_csv(codelist_path, index=False)
             print('New codes have been added to file: ')
             print(codelist_path)
-            return newcodelist
         except Exception as e:
             print('Something went wrong adding new codelists: ' + str(e))
-            return str(e)
         
     except Exception as e:
         print('Error: ' + str(e))
