@@ -254,13 +254,17 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 print('In Folder: ' + out)
                 print(long_dotted_line)
                 output.to_csv(f'{out}/{dimension}{output_filename}', index=False)
+                return f'{out}/{dimension}{output_filename}
             else:
                 print('----------------- Results are empty so no file has been output.')
+                return 'No results'
         except Exception as x:
             print(x)
+            reuturn x
 
     except Exception as e:
         print('---- Loop Error: ' + str(e))
+        return e
 
 
 def display_dataset_unique_values(dataset):
