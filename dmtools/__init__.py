@@ -260,11 +260,11 @@ def check_all_codes_in_codelist(codes, pth, colnme, dimension, outputfoundcodes)
                 return 'No results'
         except Exception as x:
             print(x)
-            reuturn ''
+            return x
 
     except Exception as e:
         print('---- Loop Error: ' + str(e))
-        return ''
+        return e
 
 
 def display_dataset_unique_values(dataset):
