@@ -34,10 +34,15 @@ ns1:ons-trade-in-goods-metadata {
     schema:dateModified "2021-05-12T09:30:00.000+00:00"^^xsd:dateTime ;
     gdp:updateDueOn "2021-06-11T00:00:00"^^xsd:dateTime;
     schema:name "UK trade in goods: country-by-commodity, exports and imports" ;
-    schema:text "Monthly import/export country-by-commodity data on the UK's trade in goods, including trade by all countries and selected commodities, non-seasonally adjusted." ;
-    schema:publisher <https://www.ons.gov.uk> ;
-    schema:author gov:office-for-national-statistics;
+    schema:publisher gov:office-for-national-statistics;
+    schema:repeatFrequency <http://purl.org/linked-data/sdmx/2009/code#freq-M> ;
+    schema:description "Monthly import/export country-by-commodity data on the UK's trade in goods, including trade by all countries and selected commodities, non-seasonally adjusted." ;
 
+    dct:issued "2021-05-12T09:30:00.000+00:00"^^xsd:date;
+    dct:modified "2021-05-12T09:30:00.000+00:00"^^xsd:dateTime;
+    dct:title "UK trade in goods: country-by-commodity, exports and imports"@en;
+    dct:publisher gov:office-for-national-statistics;
+    dct:accrualPeriodicity <http://purl.org/linked-data/sdmx/2009/code#freq-M> ;
     dct:description """ 
 Monthly import country-by-commodity data on the UK's trade in goods, including trade by all countries and selected commodities, non-seasonally adjusted.
 
@@ -58,11 +63,8 @@ While we are happy with the quality of the data in this experimental release we 
 We will continue to review the movements seen in both the HMRC microdata and the linking methodology and, where appropriate, will further develop the methodology for Trade in Goods by Industry for future releases. 
 
 """@en;
-    dct:issued "2021-04-13"^^xsd:date;
     dct:license <http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/>;
-    dct:modified "2021-05-05T13:21:30.480244+00:00"^^xsd:dateTime;
-    dct:publisher gov:office-for-national-statistics;
-    dct:title "UK trade in goods: country-by-commodity, exports and imports"@en;
+    
     void:sparqlEndpoint <http://gss-data.org.uk/sparql>;
     rdfs:comment "Monthly export country-by-commodity data on the UK's trade in goods, including trade by all countries and selected commodities, non-seasonally adjusted."@en;
     dcat:contactPoint <mailto:trade@ons.gov.uk>;
