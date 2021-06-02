@@ -15,7 +15,7 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix theme: <http://gss-data.org.uk/def/concept/statistics-authority-themes/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
-@prefix schema: <http://schema.org> .
+@prefix schema: <http://schema.org#> .
 
 ns1:ons-trade-in-goods-metadata {
   <http://gss-data.org.uk/catalog/datasets> a dcat:Catalog;
